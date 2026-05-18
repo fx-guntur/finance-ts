@@ -1,0 +1,113 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: light;
+  --background: 240 20% 98%;
+  --foreground: 222 47% 11%;
+  --surface: 0 0% 100%;
+  --surface-strong: 240 20% 96%;
+  --border: 220 13% 91%;
+  --muted: 220 14% 96%;
+  --muted-foreground: 215 16% 47%;
+  --primary: 217 91% 60%;
+  --primary-foreground: 0 0% 100%;
+  --accent: 181 100% 42%;
+  --accent-foreground: 222 47% 11%;
+  --success: 142 71% 45%;
+  --warning: 38 92% 50%;
+  --danger: 0 84% 60%;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.5rem;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --background: 222 47% 7%;
+  --foreground: 210 40% 98%;
+  --surface: 222 40% 11%;
+  --surface-strong: 222 35% 14%;
+  --border: 217 33% 18%;
+  --muted: 217 33% 15%;
+  --muted-foreground: 215 20% 72%;
+  --primary: 217 91% 65%;
+  --primary-foreground: 222 47% 11%;
+  --accent: 181 100% 44%;
+  --accent-foreground: 222 47% 11%;
+  --success: 142 71% 52%;
+  --warning: 38 92% 58%;
+  --danger: 0 84% 68%;
+}
+
+html {
+  background:
+    radial-gradient(circle at top left, rgba(59, 130, 246, 0.16), transparent 30%),
+    radial-gradient(circle at top right, rgba(34, 197, 94, 0.12), transparent 26%),
+    linear-gradient(180deg, hsl(var(--background)), hsl(var(--background)));
+  color: hsl(var(--foreground));
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background: transparent;
+  color: hsl(var(--foreground));
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  transition:
+    color 0.25s ease,
+    background-color 0.25s ease,
+    border-color 0.25s ease;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+button,
+input,
+textarea,
+select,
+a,
+.glass-panel {
+  transition:
+    color 0.25s ease,
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease,
+    opacity 0.25s ease;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+[role="button"],
+a,
+input[type="button"],
+input[type="submit"] {
+  cursor: pointer;
+}
+
+button:disabled,
+[role="button"][aria-disabled="true"] {
+  cursor: not-allowed;
+}
+
+.glass-panel {
+  background: color-mix(in srgb, hsl(var(--surface)) 72%, transparent);
+  border: 1px solid hsl(var(--border) / 0.65);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 24px 80px rgba(15, 23, 42, 0.12);
+}
