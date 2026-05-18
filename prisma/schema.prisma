@@ -1,0 +1,120 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  name         String?
+  passwordHash String    @map("password_hash")
+  status       String    @default("active")
+  lastLoginAt  DateTime? @map("last_login_at")
+  deletedAt    DateTime? @map("deleted_at")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  salaries         Salary[]
+  categories       Category[]
+  monthlyExpenses   MonthlyExpense[]
+  dailyExpenses    DailyExpense[]
+
+  @@map("users")
+  @@index([status])
+  @@index([deletedAt])
+}
+
+model Salary {
+  id            String    @id @default(cuid())
+  userId        String    @map("user_id")
+  monthlySalary Decimal   @db.Decimal(14, 2) @map("amount")
+  currency      String    @default("IDR")
+  paydayDay     Int       @map("payday_day")
+  effectiveFrom DateTime  @map("effective_from")
+  effectiveTo   DateTime? @map("effective_to")
+  isActive      Boolean   @default(true) @map("is_active")
+  deletedAt     DateTime? @map("deleted_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("salaries")
+  @@index([userId, isActive])
+  @@index([userId, effectiveFrom])
+  @@index([deletedAt])
+}
+
+model Category {
+  id         String    @id @default(cuid())
+  userId     String    @map("user_id")
+  name       String
+  type       String
+  color      String?
+  iconKey    String?   @map("icon_key")
+  sortOrder  Int       @default(0) @map("sort_order")
+  isSystem   Boolean   @default(false) @map("is_system")
+  isActive   Boolean   @default(true) @map("is_active")
+  deletedAt  DateTime? @map("deleted_at")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  monthlyExpenses MonthlyExpense[]
+  dailyExpenses   DailyExpense[]
+
+  @@map("categories")
+  @@unique([userId, name])
+  @@index([userId, type])
+  @@index([deletedAt])
+}
+
+model MonthlyExpense {
+  id             String    @id @default(cuid())
+  userId         String    @map("user_id")
+  categoryId     String    @map("category_id")
+  title          String
+  amount         Decimal   @db.Decimal(14, 2)
+  dueDay         Int       @map("due_day")
+  isMandatory    Boolean   @default(true) @map("is_mandatory")
+  billingCycle   String    @default("monthly") @map("billing_cycle")
+  notes          String?
+  isActive       Boolean   @default(true) @map("is_active")
+  deletedAt      DateTime? @map("deleted_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+
+  @@map("monthly_expenses")
+  @@index([userId, isActive])
+  @@index([userId, categoryId])
+  @@index([dueDay])
+  @@index([deletedAt])
+}
+
+model DailyExpense {
+  id          String    @id @default(cuid())
+  userId      String    @map("user_id")
+  categoryId  String    @map("category_id")
+  spentAt     DateTime  @map("spent_at")
+  amount      Decimal   @db.Decimal(14, 2)
+  merchantName String?  @map("merchant_name")
+  note        String?
+  deletedAt   DateTime? @map("deleted_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+
+  @@map("daily_expenses")
+  @@index([userId, spentAt])
+  @@index([userId, categoryId, spentAt])
+  @@index([deletedAt])
+}
