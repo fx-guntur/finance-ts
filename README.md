@@ -193,10 +193,6 @@ This keeps the codebase easy to extend without mixing responsibilities.
 | `prisma/` | Prisma schema and migrations |
 | `shared/` | Reserved for future cross-app shared assets |
 | `docs/` | Reserved documentation folder |
-| `PROJECT_CONTEXT.md` | AI context and architecture reference |
-| `ROADMAP.md` | Development phase plan |
-| `DATABASE_PLAN.md` | Database planning reference |
-| `FOLDER_STRUCTURE.md` | Folder structure guide |
 
 ### Frontend Structure
 
